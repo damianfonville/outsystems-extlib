@@ -2,32 +2,13 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    tags:
+      - "v[0-9]*.[0-9]*.[0-9]*"
+      - "[0-9]*.[0-9]*.[0-9]*"
 
 jobs:
-  generate-version:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: GitHub Tag Bump
-        id: tab_bump
-        uses: anothrNick/github-tag-action@1.71.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          INITIAL_VERSION: 1.0.0
-          DEFAULT_BUMP: patch
-
-    outputs:
-      new_version: ${{ steps.tab_bump.outputs.new_tag }}
-
-
   package-and-publish-lib:
     runs-on: windows-latest
-    needs: generate-version
     permissions:
       contents: write
       packages: write
@@ -41,8 +22,21 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Compute package version
+        id: version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+
+          if ($tag -notmatch '^v?\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') {
+            throw "Tag '$tag' is not a supported version tag. Use 1.2.3, v1.2.3, or 1.2.3-preview.1."
+          }
+
+          $version = $tag -replace '^v', ''
+          "version=$version" >> $env:GITHUB_OUTPUT
+
       - name: Create the package
-        run: dotnet pack --configuration Release OutSystems.ExternalLibrary.Template.csproj -p:Version=${{ needs.generate-version.outputs.new_version }} --output ./artifacts 
+        run: dotnet pack --configuration Release OutSystems.ExternalLibrary.Template.csproj -p:Version=${{ steps.version.outputs.version }} --output ./artifacts 
 
       - name: Smoke test dotnet template
         shell: pwsh
@@ -52,7 +46,6 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: artifacts/*.nupkg
-          tag_name: ${{ needs.generate-version.outputs.new_version }}
 
       - name: Publish NuGet package
         run: |

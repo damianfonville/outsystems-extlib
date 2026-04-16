@@ -157,10 +157,10 @@ Pull request builds run `.github/workflows/pr.yml`, which:
 - Runs the smoke test
 - Uploads the `.nupkg` as a workflow artifact
 
-Release builds run `.github/workflows/release.yml` on pushes to `main`, which:
+Release builds run `.github/workflows/release.yml` when a version tag is pushed, which:
 
-- Creates or bumps a Git tag
-- Packs the template with the generated version
+- Uses the pushed tag as the package version
+- Packs the template with that version
 - Runs the smoke test
 - Creates a GitHub release
 - Pushes the package to NuGet
