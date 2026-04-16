@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/damianfonville/outsystems-extlib</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENCE</PackageLicenseFile>
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <ContentTargetFolders>content</ContentTargetFolders>
@@ -28,6 +29,9 @@
              Pack="true"
              PackagePath="content" />
     <Content Include="README.md"
+             Pack="true"
+             PackagePath="\" />
+    <Content Include="LICENCE"
              Pack="true"
              PackagePath="\" />
   </ItemGroup>
