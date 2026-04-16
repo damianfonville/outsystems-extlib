@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  generate-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: GitHub Tag Bump
+        id: tab_bump
+        uses: anothrNick/github-tag-action@1.71.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INITIAL_VERSION: 1.0.0
+          DEFAULT_BUMP: patch
+
+    outputs:
+      new_version: ${{ steps.tab_bump.outputs.new_tag }}
+
+
+  package-and-publish-lib:
+    runs-on: windows-latest
+    needs: generate-version
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Create the package
+        run: dotnet pack --configuration Release OutSystems.ExternalLibrary.Template.csproj -p:Version=${{ needs.generate-version.outputs.new_version }} --output ./artifacts 
+
+      - name: Smoke test dotnet template
+        shell: pwsh
+        run: .\build\Invoke-DotNetTemplateSmokeTest.ps1
+        
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: artifacts/*.nupkg
+          tag_name: ${{ needs.generate-version.outputs.new_version }}
+
+      - name: Publish NuGet package
+        run: |
+          $package = Get-ChildItem -Path artifacts -Filter *.nupkg -File | Select-Object -First 1
+
+          if (-not $package) {
+            throw "No .nupkg file found in artifacts."
+          }
+
+          dotnet nuget push $package.FullName --api-key ${{ secrets.PUSH_NUGET }} --source https://api.nuget.org/v3/index.json --skip-duplicate

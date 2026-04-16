@@ -1,0 +1,39 @@
+name: PR
+
+on:
+  pull_request:
+
+jobs:
+  validate-and-package:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Compute package version
+        id: version
+        shell: pwsh
+        run: |
+          $version = "0.1.0-pr.${{ github.event.pull_request.number }}"
+          "version=$version" >> $env:GITHUB_OUTPUT
+       
+      - name: Create the package
+        run: dotnet pack --configuration Release OutSystems.ExternalLibrary.Template.csproj -p:Version=${{ steps.version.outputs.version }} --output ./artifacts
+
+      - name: Smoke test dotnet template
+        shell: pwsh
+        run: .\build\Invoke-DotNetTemplateSmokeTest.ps1
+
+
+      - name: Upload template artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: dotnet-template
+          path: artifacts/*.nupkg
+          if-no-files-found: error

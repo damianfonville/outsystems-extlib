@@ -1,0 +1,10 @@
+.vs/
+.sarif/
+.tmp/
+artifacts/
+
+**/bin/
+**/obj/
+
+*.user
+*.suo

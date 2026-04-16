@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/template",
+  "author": "Damian Fonville",
+  "classifications": [
+    "OutSystems",
+    "C#",
+    "Library",
+    "Tests"
+  ],
+  "identity": "dfonville.OutSystems.ExternalLibraries.CSharp.Cli",
+  "name": "OutSystems External Library",
+  "shortName": "outsystems-extlib",
+  "sourceName": "OutSystems.ExternalLibrary",
+  "defaultName": "OutSystems.ExternalLibrary",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "primaryOutputs": [
+    {
+      "path": "OutSystems.ExternalLibrary.slnx"
+    },
+    {
+      "path": "OutSystems.ExternalLibrary/OutSystems.ExternalLibrary.csproj"
+    },
+    {
+      "path": "OutSystems.ExternalLibrary.Tests/OutSystems.ExternalLibrary.Tests.csproj"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="OutSystems.ExternalLibrary/OutSystems.ExternalLibrary.csproj" />
+  <Project Path="OutSystems.ExternalLibrary.Tests/OutSystems.ExternalLibrary.Tests.csproj" />
+</Solution>

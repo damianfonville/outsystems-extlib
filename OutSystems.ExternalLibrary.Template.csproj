@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <PackageId>dfonville.OutSystems.ExternalLibrary.Template</PackageId>
+    <Version>0.1.0-local</Version>
+    <PackageVersion>$(Version)</PackageVersion>
+    <Title>OutSystems External Library Template</Title>
+    <Authors>Damian Fonville</Authors>
+    <Description>dotnet new template package for creating an OutSystems external library.</Description>
+    <PackageTags>dotnet-new;template;outsystems;csharp</PackageTags>
+    <PackageType>Template</PackageType>
+    <RepositoryUrl>https://github.com/damianfonville/outsystems-extlib</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="dotnet-template\OutSystems.ExternalLibrary.CSharp\**\*"
+             Pack="true"
+             PackagePath="content" />
+    <Content Include="README.md"
+             Pack="true"
+             PackagePath="\" />
+  </ItemGroup>
+</Project>
