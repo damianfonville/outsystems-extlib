@@ -4,13 +4,13 @@ A `dotnet new` template for creating an OutSystems external library solution in 
 
 The template creates a ready-to-build solution with:
 
-- A .NET 8 external library project
+- A .NET 10 external library project
 - A companion NUnit test project
 - A `.slnx` solution file
 
 ## Prerequisites
 
-- .NET SDK 8.0 or later
+- .NET SDK 10.0 or later
 
 Check your installed SDKs with:
 

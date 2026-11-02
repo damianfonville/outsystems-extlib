@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <PackageId>dfonville.OutSystems.ExternalLibrary.Template</PackageId>
     <Version>0.1.0-local</Version>
     <PackageVersion>$(Version)</PackageVersion>
